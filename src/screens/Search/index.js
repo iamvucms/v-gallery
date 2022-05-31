@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './styles';
-import {PhotoGallery, VText} from '../../components';
+import {Padding, PhotoGallery, VText} from '../../components';
 import {CloseSvg, SearchSvg} from '../../assets/svg';
 import {Colors} from '../../constants';
 import {Observer, useLocalObservable} from 'mobx-react-lite';
@@ -16,7 +16,9 @@ import Animated, {FadeIn} from 'react-native-reanimated';
 import {EmptyBoxSrc} from '../../assets/images';
 import {galleryStore} from '../../stores';
 import {autorun, flow} from 'mobx';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
 const Search = () => {
+  const {bottom} = useSafeAreaInsets();
   const state = useLocalObservable(() => ({
     keyword: '',
     setKeyword: keyword => {
@@ -39,24 +41,31 @@ const Search = () => {
       }, 300);
     });
   }, []);
-  const renderEmptyComponent = React.useCallback(() => (
-    <View style={styles.emptyContainer}>
+  const renderEmptyComponent = React.useCallback(
+    () => (
+      <View style={styles.emptyContainer}>
+        <Image style={styles.emptyImage} source={EmptyBoxSrc} />
+        <VText align="center" fontWeight={300} color={Colors.secondary}>
+          {`Sorry, we couldn't find any photos\nmatching your search.`}
+        </VText>
+      </View>
+    ),
+    [],
+  );
+  const renderListFooter = React.useCallback(
+    () => (
       <Observer>
-        {() =>
-          galleryStore.searching ? (
-            <ActivityIndicator size="large" color={Colors.primary} />
-          ) : (
-            <>
-              <Image style={styles.emptyImage} source={EmptyBoxSrc} />
-              <VText align="center" fontWeight={300} color={Colors.secondary}>
-                {`Sorry, we couldn't find any photos\nmatching your search.`}
-              </VText>
-            </>
-          )
-        }
+        {() => (
+          <Padding paddingVertical={bottom}>
+            {galleryStore.searching && (
+              <ActivityIndicator size="large" color={Colors.primary} />
+            )}
+          </Padding>
+        )}
       </Observer>
-    </View>
-  ));
+    ),
+    [],
+  );
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -94,6 +103,10 @@ const Search = () => {
           <PhotoGallery
             data={galleryStore.searchResults}
             title="Result"
+            onFetchMore={() =>
+              galleryStore.fetchResults(state.keyword.toLocaleLowerCase(), true)
+            }
+            listFooter={renderListFooter}
             emptyComponent={renderEmptyComponent}
           />
         )}

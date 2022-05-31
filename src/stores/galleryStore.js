@@ -22,6 +22,7 @@ export class GalleryStore {
       searchResults: observable,
       searching: observable,
       feedPhotos: computed,
+      fetchingPhotos: observable,
       carouselPhotos: computed,
       fetchPhotos: flow,
       fetchResults: flow,
@@ -36,10 +37,11 @@ export class GalleryStore {
     return this.photos.slice(0, 10);
   }
   *fetchPhotos(isFetchMore = false) {
+    if (this.fetchingPhotos) return;
     this.fetchingPhotos = true;
     try {
       this.currentPage = isFetchMore ? this.currentPage + 1 : 1;
-      const limit = isFetchMore ? 20 : 49;
+      const limit = 40;
       const photos = yield fetch500PxPhotos('', this.currentPage, limit);
       this.photos = isFetchMore ? [...this.photos, ...photos] : photos;
     } catch (err) {
@@ -48,10 +50,11 @@ export class GalleryStore {
     this.fetchingPhotos = false;
   }
   *fetchResults(query, isFetchMore) {
+    if (this.searching) return;
     this.searching = true;
     try {
       this.currentSearchPage = isFetchMore ? this.currentSearchPage + 1 : 1;
-      const photos = yield fetch500PxPhotos(query, this.currentPage, 30);
+      const photos = yield fetch500PxPhotos(query, this.currentSearchPage, 30);
       this.searchResults = isFetchMore
         ? [...this.searchResults, ...photos]
         : photos;

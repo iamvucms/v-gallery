@@ -30,11 +30,11 @@ const PhotoGallery = ({
   listFooter,
   title = `Today's Photo`,
   emptyComponent,
+  onFetchMore,
 }) => {
   const animGridSize = useSharedValue(getGridItemSize(3));
   const animColumn = useSharedValue(3);
   const animGridLayout = useSharedValue(1);
-  useEffect(() => {}, []);
   const gridItemStyle = useAnimatedStyle(() => ({
     height: animGridSize.value,
     width: animGridSize.value,
@@ -49,6 +49,20 @@ const PhotoGallery = ({
   const onImagePress = React.useCallback((image, specs) => {
     appStore.setPhotoDetailData(true, image, specs);
   }, []);
+  const onScrollEnd = React.useCallback(
+    ({
+      nativeEvent: {
+        contentOffset: {y},
+        layoutMeasurement: {height: viewHeight},
+        contentSize: {height: contentHeight},
+      },
+    }) => {
+      if (contentHeight - viewHeight - y <= 200) {
+        onFetchMore && onFetchMore();
+      }
+    },
+    [],
+  );
   const renderGridItem = item => {
     return (
       <Animated.View key={item.id} style={[styles.gridItem, gridItemStyle]}>
@@ -76,6 +90,8 @@ const PhotoGallery = ({
     <View style={styles.container}>
       <PinchGestureHandler onGestureEvent={pingestureHandler}>
         <Animated.ScrollView
+          onScrollEndDrag={onScrollEnd}
+          onMomentumScrollEnd={onScrollEnd}
           style={[styles.gridModeContainer, girdContainerStyle]}>
           {typeof listHeader === 'function' ? listHeader() : listHeader}
           <Padding paddingHorizontal={10}>

@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './styles';
 import {
@@ -23,6 +23,17 @@ const Home = () => {
   const renderListHeader = () => (
     <Observer>
       {() => <PhotoCarousel data={galleryStore.carouselPhotos} />}
+    </Observer>
+  );
+  const renderListFooter = () => (
+    <Observer>
+      {() => (
+        <Padding paddingVertical={bottom}>
+          {galleryStore.fetchingPhotos && (
+            <ActivityIndicator size="large" color={Colors.primary} />
+          )}
+        </Padding>
+      )}
     </Observer>
   );
   const onMenuPress = React.useCallback(() => {
@@ -51,8 +62,9 @@ const Home = () => {
           {() => (
             <PhotoGallery
               data={galleryStore.feedPhotos}
-              listFooter={<Padding bottom={bottom} />}
+              listFooter={renderListFooter}
               listHeader={renderListHeader}
+              onFetchMore={() => galleryStore.fetchPhotos(true)}
             />
           )}
         </Observer>
