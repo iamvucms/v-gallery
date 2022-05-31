@@ -8,7 +8,6 @@ export class AppStore {
   photoDetailData = null;
   constructor() {
     ignorePersistProperties(this, [
-      'onboardingComplete',
       'photoDetailData',
       'drawerMenuNavigationVisible',
     ]);
