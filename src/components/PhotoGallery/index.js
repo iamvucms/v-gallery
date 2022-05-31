@@ -24,7 +24,13 @@ const getGridItemSize = (column, margin = 10) => {
   return (width - margin * (column + 1)) / column;
 };
 const SCALE_THRESHOLD = 0.3;
-const PhotoGallery = ({data = [], listHeader, listFooter}) => {
+const PhotoGallery = ({
+  data = [],
+  listHeader,
+  listFooter,
+  title = `Today's Photo`,
+  emptyComponent,
+}) => {
   const animGridSize = useSharedValue(getGridItemSize(3));
   const animColumn = useSharedValue(3);
   const animGridLayout = useSharedValue(1);
@@ -73,13 +79,19 @@ const PhotoGallery = ({data = [], listHeader, listFooter}) => {
           style={[styles.gridModeContainer, girdContainerStyle]}>
           {typeof listHeader === 'function' ? listHeader() : listHeader}
           <Padding paddingHorizontal={10}>
-            <VText fontSize="h6">Today's Photos</VText>
+            <VText fontSize="h6">{title}</VText>
           </Padding>
           <View style={styles.gridContainer}>
-            <Observer>
-              {() => galleryStore.feedPhotos.map(renderGridItem)}
-            </Observer>
+            {data.map(renderGridItem)}
+            {data.length === 0 && (
+              <View style={styles.emptyContainer}>
+                {typeof emptyComponent === 'function'
+                  ? emptyComponent()
+                  : emptyComponent}
+              </View>
+            )}
           </View>
+
           {typeof listFooter === 'function' ? listFooter() : listFooter}
         </Animated.ScrollView>
       </PinchGestureHandler>

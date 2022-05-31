@@ -7,4 +7,5 @@ export const Colors = {
   white50: 'rgba(255, 255, 255, 0.5)',
   black: '#000000',
   gray: '#979797',
+  app_background: 'rgb(245,245,245)',
 };

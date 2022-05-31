@@ -5,3 +5,4 @@ export {default as Padding} from './Padding';
 export {default as VImage} from './VImage';
 export {default as PhotoDetailModal} from './PhotoDetailModal';
 export {default as PhotoCarousel} from './PhotoCarousel';
+export {default as BottomTabBar} from './BottomTabBar';

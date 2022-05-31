@@ -1,16 +1,32 @@
-import {computed, flow, makeObservable, observable} from 'mobx';
+import {action, computed, flow, makeObservable, observable} from 'mobx';
+import {ignorePersistProperties, fetch500PxPhotos} from '../utils';
 
 export class GalleryStore {
   photos = [];
-  tags = [];
+  favoritePhotos = [];
+  searchResults = [];
   currentPage = 1;
+  fetchingPhotos = false;
+  currentSearchPage = 1;
+  searching = false;
   constructor() {
+    ignorePersistProperties(this, [
+      'currentPage',
+      'fetchingPhotos',
+      'searching',
+      'currentSearchPage',
+    ]);
     makeObservable(this, {
       photos: observable,
-      tags: observable,
+      favoritePhotos: observable,
+      searchResults: observable,
+      searching: observable,
       feedPhotos: computed,
       carouselPhotos: computed,
       fetchPhotos: flow,
+      fetchResults: flow,
+      addFavorite: action,
+      removeFavorite: action,
     });
   }
   get feedPhotos() {
@@ -20,25 +36,39 @@ export class GalleryStore {
     return this.photos.slice(0, 10);
   }
   *fetchPhotos(isFetchMore = false) {
-    const type = this.tags.join('+');
-    this.currentPage = isFetchMore ? this.currentPage + 1 : 1;
-    const data = yield fetch(
-      `https://api.500px.com/v1/photos/search?type=photos&term=${type}&image_size%5B%5D=1&image_size%5B%5D=2&image_size%5B%5D=32&image_size%5B%5D=31&image_size%5B%5D=33&image_size%5B%5D=34&image_size%5B%5D=35&image_size%5B%5D=36&image_size%5B%5D=2048&image_size%5B%5D=4&image_size%5B%5D=14&include_states=true&formats=jpeg%2Clytro&include_tags=true&exclude_nude=true&page=${
-        this.currentPage
-      }&rpp=${isFetchMore ? 20 : 50}`,
-    ).then(res => res.json());
-    const photos = data.photos.map(photo => ({
-      id: photo.id,
-      description: photo.description,
-      baseUrl: [...photo.image_url].pop(),
-      user: {
-        username: photo.user.username,
-        avatar: photo.user.avatars.default.https,
-      },
-      created_at: photo.created_at,
-      width: photo.width,
-      height: photo.height,
-    }));
-    this.photos = isFetchMore ? [...this.photos, ...photos] : photos;
+    this.fetchingPhotos = true;
+    try {
+      this.currentPage = isFetchMore ? this.currentPage + 1 : 1;
+      const limit = isFetchMore ? 20 : 49;
+      const photos = yield fetch500PxPhotos('', this.currentPage, limit);
+      this.photos = isFetchMore ? [...this.photos, ...photos] : photos;
+    } catch (err) {
+      console.log({fetchPhotos: err});
+    }
+    this.fetchingPhotos = false;
+  }
+  *fetchResults(query, isFetchMore) {
+    this.searching = true;
+    try {
+      this.currentSearchPage = isFetchMore ? this.currentSearchPage + 1 : 1;
+      const photos = yield fetch500PxPhotos(query, this.currentPage, 30);
+      this.searchResults = isFetchMore
+        ? [...this.searchResults, ...photos]
+        : photos;
+    } catch (err) {
+      console.log({fetchResults: err});
+    }
+    this.searching = false;
+  }
+  addFavorite(photo) {
+    this.favoritePhotos.push({...photo});
+  }
+  removeFavorite(photoId) {
+    this.favoritePhotos = this.favoritePhotos.filter(
+      favorite => favorite.id !== photoId,
+    );
+  }
+  getIsFavorite(photoId) {
+    return !!this.favoritePhotos.find(favorite => favorite.id === photoId);
   }
 }

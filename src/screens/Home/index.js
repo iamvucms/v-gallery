@@ -12,7 +12,7 @@ import {MenuBarsSvg} from '../../assets/svg';
 import {Colors} from '../../constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {flow} from 'mobx';
-import {galleryStore} from '../../stores';
+import {appStore, galleryStore} from '../../stores';
 import {Observer} from 'mobx-react-lite';
 
 const Home = () => {
@@ -25,7 +25,9 @@ const Home = () => {
       {() => <PhotoCarousel data={galleryStore.carouselPhotos} />}
     </Observer>
   );
-
+  const onMenuPress = React.useCallback(() => {
+    appStore.setDrawerMenuNavigationVisible(true);
+  }, []);
   return (
     <Container disableLast>
       <View style={styles.header}>
@@ -40,15 +42,20 @@ const Home = () => {
             </VText>
           </VText>
         </View>
-        <TouchableOpacity style={styles.btnMenu}>
+        <TouchableOpacity onPress={onMenuPress} style={styles.btnMenu}>
           <MenuBarsSvg size={24} color={Colors.primary} />
         </TouchableOpacity>
       </View>
       <View style={styles.body}>
-        <PhotoGallery
-          listFooter={<Padding bottom={bottom} />}
-          listHeader={renderListHeader}
-        />
+        <Observer>
+          {() => (
+            <PhotoGallery
+              data={galleryStore.feedPhotos}
+              listFooter={<Padding bottom={bottom} />}
+              listHeader={renderListHeader}
+            />
+          )}
+        </Observer>
       </View>
     </Container>
   );

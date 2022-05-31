@@ -3,6 +3,9 @@ import {
   PersonWithComputerSrc,
   SquareCheckSrc,
 } from '../assets/images';
+import React from 'react';
+import {HeartSvg, HomeSvg, ProfileSvg, SearchSvg} from '../assets/svg';
+import {Colors} from './colors';
 
 export const OnboardingData = [
   {
@@ -25,5 +28,40 @@ export const OnboardingData = [
       'We have a simple and easy way to view all your photos in one place.',
     image: SquareCheckSrc,
     imageScale: 0.9,
+  },
+];
+export const TabBarData = [
+  {
+    title: 'Home',
+    icon: <HomeSvg color={Colors.white} />,
+    routeName: 'Home',
+  },
+  {
+    title: 'Search',
+    icon: <SearchSvg color={Colors.white} />,
+    routeName: 'Search',
+  },
+  {
+    title: 'Favorite',
+    icon: <HeartSvg color={Colors.white} />,
+    routeName: 'Favorite',
+  },
+];
+export const DrawerData = [
+  {
+    title: 'Home',
+    routeName: 'Home',
+  },
+  {
+    title: 'Search',
+    routeName: 'Search',
+  },
+  {
+    title: 'Favorite',
+    routeName: 'Favorite',
+  },
+  {
+    title: 'Terms & Privacy',
+    routeName: 'TermsAndPrivacy',
   },
 ];

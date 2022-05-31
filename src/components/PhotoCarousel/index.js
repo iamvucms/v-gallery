@@ -25,7 +25,7 @@ const PhotoCarousel = ({data = []}) => {
     return <CarouselImage anim={animX} data={item} index={index} />;
   }, []);
   const renderCarouselPageIndicatorItem = (_, index) => {
-    return <CarouselPoint index={index} anim={animX} />;
+    return <CarouselPoint key={index} index={index} anim={animX} />;
   };
   const imageKeyExtractor = React.useCallback(item => `${item.id}`, []);
   return (

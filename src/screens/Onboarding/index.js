@@ -33,7 +33,7 @@ const Onboarding = ({navigation}) => {
             index: 0,
             routes: [
               {
-                name: 'HomeStack',
+                name: 'HomeTab',
               },
             ],
           }),
