@@ -6,4 +6,5 @@ export const Colors = {
   white: '#FFFFFF',
   white50: 'rgba(255, 255, 255, 0.5)',
   black: '#000000',
+  gray: '#979797',
 };

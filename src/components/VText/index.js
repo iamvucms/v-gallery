@@ -27,7 +27,7 @@ const VText = ({
   children,
   fontWeight = 400,
   fontSize = 'normal',
-  color = Colors.typography,
+  color = Colors.black,
   lineHeightRatio,
   lineHeight,
   style,

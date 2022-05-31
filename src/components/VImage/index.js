@@ -1,6 +1,7 @@
 import {Image, Pressable} from 'react-native';
 import React, {useRef} from 'react';
 import styles from './styles';
+import {Colors} from '../../constants';
 
 const VImage = ({data, style, onPress, ...imageProps}) => {
   const imageRef = useRef();
@@ -10,7 +11,10 @@ const VImage = ({data, style, onPress, ...imageProps}) => {
     });
   }, []);
   return (
-    <Pressable onPress={onImagePress} style={styles.container}>
+    <Pressable
+      delayPressOut={300}
+      onPress={onImagePress}
+      style={styles.container}>
       <Image
         ref={imageRef}
         source={{

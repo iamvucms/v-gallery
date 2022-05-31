@@ -14,8 +14,8 @@ const App = () => {
       .then(() => {
         setLoaded(true);
       })
-      .then(() => {
-        console.log('err');
+      .catch(e => {
+        console.log('err', e);
       });
   }, []);
   return (

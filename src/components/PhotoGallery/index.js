@@ -13,7 +13,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import VImage from '../VImage';
 import {useNavigation} from '@react-navigation/native';
-import {appStore} from '../../stores';
+import {appStore, galleryStore} from '../../stores';
+import Padding from '../Padding';
+import {Observer} from 'mobx-react-lite';
 const {width} = Layout.window;
 const MAX_COLUMN = 6;
 const MIN_COLUMN = 1;
@@ -22,7 +24,7 @@ const getGridItemSize = (column, margin = 10) => {
   return (width - margin * (column + 1)) / column;
 };
 const SCALE_THRESHOLD = 0.3;
-const PhotoGallery = ({data = []}) => {
+const PhotoGallery = ({data = [], listHeader, listFooter}) => {
   const animGridSize = useSharedValue(getGridItemSize(3));
   const animColumn = useSharedValue(3);
   const animGridLayout = useSharedValue(1);
@@ -39,9 +41,9 @@ const PhotoGallery = ({data = []}) => {
     ],
   }));
   const onImagePress = React.useCallback((image, specs) => {
-    appStore.setPhotoDetailData(image, specs);
+    appStore.setPhotoDetailData(true, image, specs);
   }, []);
-  const renderGridItem = (item, index) => {
+  const renderGridItem = item => {
     return (
       <Animated.View key={item.id} style={[styles.gridItem, gridItemStyle]}>
         <VImage onPress={onImagePress} style={styles.image} data={item} />
@@ -69,7 +71,16 @@ const PhotoGallery = ({data = []}) => {
       <PinchGestureHandler onGestureEvent={pingestureHandler}>
         <Animated.ScrollView
           style={[styles.gridModeContainer, girdContainerStyle]}>
-          <View style={styles.gridContainer}>{data.map(renderGridItem)}</View>
+          {typeof listHeader === 'function' ? listHeader() : listHeader}
+          <Padding paddingHorizontal={10}>
+            <VText fontSize="h6">Today's Photos</VText>
+          </Padding>
+          <View style={styles.gridContainer}>
+            <Observer>
+              {() => galleryStore.feedPhotos.map(renderGridItem)}
+            </Observer>
+          </View>
+          {typeof listFooter === 'function' ? listFooter() : listFooter}
         </Animated.ScrollView>
       </PinchGestureHandler>
     </View>
