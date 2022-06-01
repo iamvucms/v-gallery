@@ -5,6 +5,8 @@ const {makeObservable, observable, computed, action} = require('mobx');
 export class AppStore {
   onboardingComplete = false;
   drawerMenuNavigationVisible = false;
+  confirmModal = false;
+  confirmModalData = {};
   photoDetailData = null;
   user = null;
   constructor() {
@@ -18,12 +20,16 @@ export class AppStore {
       photoDetailData: observable,
       drawerMenuNavigationVisible: observable,
       user: observable,
+      confirmModal: observable,
+      confirmModalData: observable,
       isPhotoDetailVisible: computed,
       isLogined: computed,
       setPhotoDetailData: action,
       setOnboardingComplete: action,
       setDrawerMenuNavigationVisible: action,
       setUser: action,
+      logout: action,
+      setConfirmModal: action,
     });
   }
   setOnboardingComplete(onboardingComplete) {
@@ -41,6 +47,21 @@ export class AppStore {
   }
   setUser(user) {
     this.user = user;
+  }
+  logout() {
+    this.user = null;
+  }
+  setConfirmModal(confirmModal, title, description, onConfirm) {
+    this.confirmModal = confirmModal;
+    if (title && description) {
+      this.confirmModalData = {title, description};
+    }
+    if (onConfirm) {
+      this.confirmModalData.onConfirm = () => {
+        onConfirm();
+        this.setConfirmModal(false);
+      };
+    }
   }
   get isPhotoDetailVisible() {
     return !!this.photoDetailData;

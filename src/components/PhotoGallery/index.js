@@ -12,10 +12,8 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import VImage from '../VImage';
-import {useNavigation} from '@react-navigation/native';
-import {appStore, galleryStore} from '../../stores';
+import {appStore} from '../../stores';
 import Padding from '../Padding';
-import {Observer} from 'mobx-react-lite';
 const {width} = Layout.window;
 const MAX_COLUMN = 6;
 const MIN_COLUMN = 1;

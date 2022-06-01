@@ -1,10 +1,10 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Favorite, Home, Onboarding, Search} from '../screens';
+import {Albums, Favorite, Home, Onboarding, Search} from '../screens';
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationConfig} from './config';
-import {BottomTabBar, VText} from '../components';
+import {BottomTabBar, Padding, VText} from '../components';
 import {
   Image,
   Pressable,
@@ -25,6 +25,7 @@ import {autorun} from 'mobx';
 import {appStore} from '../stores';
 import {Observer} from 'mobx-react-lite';
 import {AvatarSrc} from '../assets/images';
+import {LogoutSvg} from '../assets/svg';
 const {width} = Layout.window;
 const drawerWidth = width * 0.5;
 const Stack = createNativeStackNavigator();
@@ -36,6 +37,7 @@ const HomeTab = () => {
       screenOptions={navigationConfig}>
       <BottomTab.Screen name="Home" component={Home} />
       <BottomTab.Screen name="Search" component={Search} />
+      <BottomTab.Screen name="Albums" component={Albums} />
       <BottomTab.Screen name="Favorite" component={Favorite} />
     </BottomTab.Navigator>
   );
@@ -89,6 +91,17 @@ const AppNavigationStack = () => {
     }),
     [],
   );
+  const onLogoutPress = React.useCallback(() => {
+    appStore.setConfirmModal(
+      true,
+      'Logout',
+      'Are you sure you want to logout?',
+      () => {
+        appStore.setDrawerMenuNavigationVisible(false);
+        appStore.logout();
+      },
+    );
+  }, []);
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.navigationContainer, appStyle]}>
@@ -111,7 +124,21 @@ const AppNavigationStack = () => {
       </Animated.View>
       <Animated.View style={[styles.drawerContainer, menuStyle]}>
         <View style={styles.drawerMenu}>
-          <Image style={styles.avatar} source={AvatarSrc} />
+          <Observer>
+            {() => (
+              <Padding paddingBottom={15}>
+                <Image
+                  style={styles.avatar}
+                  source={{
+                    uri: appStore?.user?.photo,
+                  }}
+                />
+                <VText align="center" fontWeight={500} color={Colors.secondary}>
+                  {appStore?.user?.name}
+                </VText>
+              </Padding>
+            )}
+          </Observer>
           <Observer>
             {() =>
               appStore.drawerMenuNavigationVisible &&
@@ -119,6 +146,12 @@ const AppNavigationStack = () => {
             }
           </Observer>
         </View>
+        <TouchableOpacity onPress={onLogoutPress} style={styles.btnLogout}>
+          <LogoutSvg size={26} />
+          <Padding paddingHorizontal={10}>
+            <VText color={Colors.white}>Logout</VText>
+          </Padding>
+        </TouchableOpacity>
       </Animated.View>
     </View>
   );
@@ -140,14 +173,19 @@ const styles = StyleSheet.create({
     width: drawerWidth,
     height: '100%',
     paddingTop: 20,
+    paddingBottom: 80,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 99,
   },
   avatar: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
+    marginTop: 53,
+    marginBottom: 5,
+    alignSelf: 'center',
+    borderRadius: 999,
   },
   drawerMenu: {
     flex: 1,
@@ -159,5 +197,14 @@ const styles = StyleSheet.create({
     marginVertical: 7,
     borderTopLeftRadius: 5,
     borderBottomLeftRadius: 5,
+  },
+  btnLogout: {
+    height: 40,
+    paddingHorizontal: 10,
+    flexDirection: 'row',
+    backgroundColor: Colors.primary,
+    alignItems: 'center',
+    borderRadius: 99,
+    alignSelf: 'center',
   },
 });

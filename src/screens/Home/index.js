@@ -11,13 +11,28 @@ import {
 import {MenuBarsSvg} from '../../assets/svg';
 import {Colors} from '../../constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {flow} from 'mobx';
+import {autorun, flow} from 'mobx';
 import {appStore, galleryStore} from '../../stores';
 import {Observer} from 'mobx-react-lite';
+import {CommonActions} from '@react-navigation/native';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const {bottom} = useSafeAreaInsets();
   useEffect(() => {
+    autorun(() => {
+      if (!appStore.isLogined) {
+        navigation.dispatch(
+          CommonActions.reset({
+            index: 0,
+            routes: [
+              {
+                name: 'Onboarding',
+              },
+            ],
+          }),
+        );
+      }
+    });
     flow(galleryStore.fetchPhotos());
   }, []);
   const renderListHeader = () => (

@@ -21,9 +21,14 @@ export const fetchMediaItems = async (query, pageToken, limit) => {
       username: '',
       avatar: '',
     },
+    title: photo.filename,
+    description: photo.mediaMetadata?.photo?.cameraMake
+      ? `Taken by ${photo.mediaMetadata.photo.cameraMake} - ${photo.mediaMetadata.photo.cameraModel}`
+      : 'No description',
+    isVideo: photo.mimeType.includes('video'),
     created_at: photo.created_at,
-    width: photo.mediaMetadata.width,
-    height: photo.mediaMetadata.height,
+    width: parseInt(photo.mediaMetadata.width),
+    height: parseInt(photo.mediaMetadata.height),
   }));
   return {
     photos,

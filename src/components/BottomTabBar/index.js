@@ -4,6 +4,7 @@ import styles from './styles';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {TabBarData} from '../../constants';
 import Animated, {BounceIn, FadeInDown} from 'react-native-reanimated';
+import CaptureButton from '../CaptureButton';
 const BottomTabBar = ({state, navigation}) => {
   const {bottom} = useSafeAreaInsets();
   const renderTabItem = (_, index) => {
@@ -21,6 +22,7 @@ const BottomTabBar = ({state, navigation}) => {
       </Pressable>
     );
   };
+  const renderNextTabItem = (_, index) => renderTabItem(_, index + 2);
   return (
     <Animated.View
       entering={FadeInDown.delay(1000)}
@@ -30,7 +32,9 @@ const BottomTabBar = ({state, navigation}) => {
           bottom: bottom > 0 ? bottom : 20,
         },
       ]}>
-      {state.routes.map(renderTabItem)}
+      {state.routes.slice(0, 2).map(renderTabItem)}
+      <CaptureButton />
+      {state.routes.slice(2).map(renderNextTabItem)}
     </Animated.View>
   );
 };

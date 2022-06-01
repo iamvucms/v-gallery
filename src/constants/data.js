@@ -4,7 +4,15 @@ import {
   SquareCheckSrc,
 } from '../assets/images';
 import React from 'react';
-import {HeartSvg, HomeSvg, ProfileSvg, SearchSvg} from '../assets/svg';
+import {
+  AlbumsSvg,
+  HeartSvg,
+  HomeSvg,
+  PhotoSvg,
+  ProfileSvg,
+  SearchSvg,
+  VideoSvg,
+} from '../assets/svg';
 import {Colors} from './colors';
 
 export const OnboardingData = [
@@ -42,6 +50,11 @@ export const TabBarData = [
     routeName: 'Search',
   },
   {
+    title: 'Albums',
+    icon: <AlbumsSvg color={Colors.white} />,
+    routeName: 'Albums',
+  },
+  {
     title: 'Favorite',
     icon: <HeartSvg color={Colors.white} />,
     routeName: 'Favorite',
@@ -63,5 +76,28 @@ export const DrawerData = [
   {
     title: 'Terms & Privacy',
     routeName: 'TermsAndPrivacy',
+  },
+];
+export const CreateOptions = [
+  {
+    icon: <PhotoSvg color={Colors.white} size={16} />,
+    routeName: 'Capture',
+    params: {
+      type: 'photo',
+    },
+    bgColor: Colors.secondary,
+  },
+  {
+    icon: <VideoSvg color={Colors.white} />,
+    routeName: 'Capture',
+    params: {
+      type: 'video',
+    },
+    bgColor: Colors.orange,
+  },
+  {
+    icon: <AlbumsSvg color={Colors.white} />,
+    routeName: 'CreateAlbum',
+    bgColor: Colors.green,
   },
 ];

@@ -84,9 +84,10 @@ const PhotoDetailModal = observer(() => {
     const {height: actualHeight, width: actualWidth} = image;
     const isPortrait = actualWidth < actualHeight;
     const targetWidth = isPortrait ? Math.min(actualWidth, width) : width;
-    const targetHeight = isPortrait
-      ? Math.min(actualHeight, height)
-      : (width / actualWidth) * actualHeight;
+    const targetHeight = Math.min(
+      (targetWidth / actualWidth) * actualHeight,
+      height,
+    );
     const targetX = (width - targetWidth) / 2;
     const targetY = (height - targetHeight) / 2;
     return {
@@ -94,7 +95,11 @@ const PhotoDetailModal = observer(() => {
       top: interpolate(anim.value, [0, 1], [specs.pageY, targetY]),
       width: interpolate(anim.value, [0, 1], [specs.width, targetWidth]),
       height: interpolate(anim.value, [0, 1], [specs.height, targetHeight]),
-      borderRadius: interpolate(anim.value, [0, 1], [5, 0]),
+      borderRadius: interpolate(
+        anim.value,
+        [0, 1],
+        [specs.borderRadius || 5, 0],
+      ),
       transform: [
         {
           translateY: animY.value,
@@ -191,7 +196,7 @@ const PhotoDetailModal = observer(() => {
                       fontSize="medium"
                       fontWeight={700}
                       color={Colors.white}>
-                      {image.user.username}
+                      {image.title}
                     </VText>
                     <Padding paddingTop={8} />
                     <VText

@@ -6,3 +6,5 @@ export {default as VImage} from './VImage';
 export {default as PhotoDetailModal} from './PhotoDetailModal';
 export {default as PhotoCarousel} from './PhotoCarousel';
 export {default as BottomTabBar} from './BottomTabBar';
+export {default as CaptureButton} from './CaptureButton';
+export {default as ConfirmModal} from './ConfirmModal';

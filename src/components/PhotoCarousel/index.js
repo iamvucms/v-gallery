@@ -60,7 +60,7 @@ const CarouselImage = React.memo(({data, index, anim}) => {
     ITEM_WIDTH * (index + 1),
   ]);
   const onImagePress = React.useCallback((image, specs) => {
-    appStore.setPhotoDetailData(true, image, specs);
+    appStore.setPhotoDetailData(true, image, {...specs, borderRadius: 10});
   }, []);
   const imageContainerStyle = useAnimatedStyle(() => ({
     transform: [
