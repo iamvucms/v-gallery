@@ -44,10 +44,10 @@ const Home = () => {
       <View style={styles.header}>
         <View>
           <VText fontSize="h5" fontWeight={500}>
-            Let's discover
+            Let's control
           </VText>
           <VText fontSize="h5" fontWeight={500}>
-            the{' '}
+            your{' '}
             <VText fontSize="h5" fontWeight={500} color={Colors.primary}>
               world
             </VText>

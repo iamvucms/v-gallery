@@ -1,20 +1,20 @@
 import {action, computed, flow, makeObservable, observable} from 'mobx';
-import {ignorePersistProperties, fetch500PxPhotos} from '../utils';
+import {ignorePersistProperties, fetchMediaItems} from '../utils';
 
 export class GalleryStore {
   photos = [];
   favoritePhotos = [];
   searchResults = [];
-  currentPage = 1;
+  nextPageToken = '';
   fetchingPhotos = false;
-  currentSearchPage = 1;
+  nextSearchPageToken = '';
   searching = false;
   constructor() {
     ignorePersistProperties(this, [
-      'currentPage',
+      'nextPageToken',
       'fetchingPhotos',
       'searching',
-      'currentSearchPage',
+      'nextSearchPageToken',
     ]);
     makeObservable(this, {
       photos: observable,
@@ -40,9 +40,14 @@ export class GalleryStore {
     if (this.fetchingPhotos) return;
     this.fetchingPhotos = true;
     try {
-      this.currentPage = isFetchMore ? this.currentPage + 1 : 1;
+      const pageToken = isFetchMore ? this.nextPageToken : '';
       const limit = 40;
-      const photos = yield fetch500PxPhotos('', this.currentPage, limit);
+      const {photos, nextPageToken} = yield fetchMediaItems(
+        '',
+        pageToken,
+        limit,
+      );
+      this.nextPageToken = nextPageToken;
       this.photos = isFetchMore ? [...this.photos, ...photos] : photos;
     } catch (err) {
       console.log({fetchPhotos: err});
@@ -53,8 +58,13 @@ export class GalleryStore {
     if (this.searching) return;
     this.searching = true;
     try {
-      this.currentSearchPage = isFetchMore ? this.currentSearchPage + 1 : 1;
-      const photos = yield fetch500PxPhotos(query, this.currentSearchPage, 30);
+      const pageToken = isFetchMore ? this.nextSearchPageToken : '';
+      const {photos, nextPageToken} = yield fetchMediaItems(
+        query,
+        pageToken,
+        30,
+      );
+      this.nextSearchPageToken = nextPageToken;
       this.searchResults = isFetchMore
         ? [...this.searchResults, ...photos]
         : photos;

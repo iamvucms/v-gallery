@@ -55,16 +55,27 @@ export default StyleSheet.create({
     marginHorizontal: 5,
   },
   btnGetStartedContainer: {
-    backgroundColor: Colors.white,
     alignSelf: 'center',
     position: 'absolute',
     bottom: 30,
-    borderRadius: 99,
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   btnGetStarted: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 25,
-    paddingVertical: 10,
+    paddingVertical: 13,
+    backgroundColor: Colors.white,
+    borderRadius: 99,
+  },
+  googleLogo: {
+    height: 20,
+    width: 20,
+    marginRight: 10,
+  },
+  btnSignIn: {
+    height: 50,
+    width: 200,
   },
 });

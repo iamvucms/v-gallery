@@ -6,8 +6,10 @@ export class AppStore {
   onboardingComplete = false;
   drawerMenuNavigationVisible = false;
   photoDetailData = null;
+  user = null;
   constructor() {
     ignorePersistProperties(this, [
+      'onboardingComplete',
       'photoDetailData',
       'drawerMenuNavigationVisible',
     ]);
@@ -15,10 +17,13 @@ export class AppStore {
       onboardingComplete: observable,
       photoDetailData: observable,
       drawerMenuNavigationVisible: observable,
+      user: observable,
       isPhotoDetailVisible: computed,
+      isLogined: computed,
       setPhotoDetailData: action,
       setOnboardingComplete: action,
       setDrawerMenuNavigationVisible: action,
+      setUser: action,
     });
   }
   setOnboardingComplete(onboardingComplete) {
@@ -34,7 +39,13 @@ export class AppStore {
   setDrawerMenuNavigationVisible(visible) {
     this.drawerMenuNavigationVisible = visible;
   }
+  setUser(user) {
+    this.user = user;
+  }
   get isPhotoDetailVisible() {
     return !!this.photoDetailData;
+  }
+  get isLogined() {
+    return !!this.user;
   }
 }

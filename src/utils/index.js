@@ -1,23 +1,32 @@
 import {ignore} from 'mobx-sync';
+import {appStore} from '../stores';
 
 export const ignorePersistProperties = (context, keys) => {
   keys.forEach(key => ignore(context, key));
 };
-export const fetch500PxPhotos = async (query, page, limit) => {
+export const fetchMediaItems = async (query, pageToken, limit) => {
   const data = await fetch(
-    `https://api.500px.com/v1/photos/search?type=photos&term=${query}&image_size%5B%5D=1&image_size%5B%5D=2&image_size%5B%5D=32&image_size%5B%5D=31&image_size%5B%5D=33&image_size%5B%5D=34&image_size%5B%5D=35&image_size%5B%5D=36&image_size%5B%5D=2048&image_size%5B%5D=4&image_size%5B%5D=14&include_states=true&formats=jpeg%2Clytro&include_tags=true&exclude_nude=true&page=${page}&rpp=${limit}`,
+    `https://photoslibrary.googleapis.com/v1/mediaItems?pageSize=${limit}&pageToken=${pageToken}`,
+    {
+      headers: {
+        Authorization: `Bearer ${appStore.user.token}`,
+      },
+    },
   ).then(res => res.json());
-  const photos = data.photos.map(photo => ({
+  const photos = data.mediaItems.map(photo => ({
     id: photo.id,
     description: photo.description,
-    baseUrl: [...photo.image_url].pop(),
+    baseUrl: photo.baseUrl,
     user: {
-      username: photo.user.username,
-      avatar: photo.user.avatars.default.https,
+      username: '',
+      avatar: '',
     },
     created_at: photo.created_at,
-    width: photo.width,
-    height: photo.height,
+    width: photo.mediaMetadata.width,
+    height: photo.mediaMetadata.height,
   }));
-  return photos;
+  return {
+    photos,
+    nextPageToken: data.nextPageToken,
+  };
 };

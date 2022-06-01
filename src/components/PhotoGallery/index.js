@@ -28,7 +28,7 @@ const PhotoGallery = ({
   data = [],
   listHeader,
   listFooter,
-  title = `Today's Photo`,
+  title = `Your Media`,
   emptyComponent,
   onFetchMore,
 }) => {

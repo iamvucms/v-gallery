@@ -1,4 +1,4 @@
-import {TouchableOpacity, View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './styles';
 import {Colors, Layout} from '../../constants';
@@ -16,6 +16,8 @@ import {ChevronRightSvg} from '../../assets/svg';
 import {CommonActions} from '@react-navigation/native';
 import {autorun} from 'mobx';
 import {appStore} from '../../stores';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+import {GoogleLogoSrc} from '../../assets/images';
 const {height, width} = Layout.window;
 const BackGroundColors = [Colors.primary, Colors.secondary, Colors.orange];
 const ImageContainerBackgroundColors = [
@@ -23,11 +25,12 @@ const ImageContainerBackgroundColors = [
   Colors.orange,
   Colors.primary,
 ];
+
 const Onboarding = ({navigation}) => {
   const anim = useSharedValue(1);
   useEffect(() => {
     autorun(() => {
-      if (appStore.onboardingComplete) {
+      if (appStore.isLogined) {
         navigation.dispatch(
           CommonActions.reset({
             index: 0,
@@ -70,8 +73,24 @@ const Onboarding = ({navigation}) => {
       },
     ],
   }));
-  const onHomePress = React.useCallback(() => {
-    appStore.setOnboardingComplete(true);
+  const onSignInPress = React.useCallback(async () => {
+    try {
+      await GoogleSignin.signIn();
+      const response = await GoogleSignin.addScopes({
+        scopes: [
+          'https://www.googleapis.com/auth/photoslibrary',
+          'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
+        ],
+      });
+      const token = await GoogleSignin.getTokens();
+      const user = {
+        ...response.user,
+        token: token.accessToken,
+      };
+      appStore.setUser(user);
+    } catch (e) {
+      console.log({onSignInPress: e});
+    }
   }, []);
   return (
     <Animated.View style={[styles.container, containerStyle]}>
@@ -140,8 +159,9 @@ const Onboarding = ({navigation}) => {
         </View>
       </View>
       <Animated.View style={[styles.btnGetStartedContainer, buttonStyle]}>
-        <TouchableOpacity onPress={onHomePress} style={styles.btnGetStarted}>
-          <VText fontWeight={600}>Get Started </VText>
+        <TouchableOpacity onPress={onSignInPress} style={styles.btnGetStarted}>
+          <Image source={GoogleLogoSrc} style={styles.googleLogo} />
+          <VText>Sign In with Google</VText>
           <ChevronRightSvg size={16} />
         </TouchableOpacity>
       </Animated.View>
