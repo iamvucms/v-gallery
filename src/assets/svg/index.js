@@ -11,3 +11,8 @@ export {default as PhotoSvg} from './photo';
 export {default as VideoSvg} from './video';
 export {default as LogoutSvg} from './logout';
 export {default as CheckSvg} from './check';
+export {default as ArrowLeftSvg} from './arrow-left';
+export {default as TrashCanSvg} from './trash';
+export {default as FlipCameraSvg} from './flip-camera';
+export {default as UploadSvg} from './upload';
+export {default as CameraSvg} from './camera';

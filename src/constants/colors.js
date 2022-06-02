@@ -7,6 +7,7 @@ export const Colors = {
   white: '#FFFFFF',
   white50: 'rgba(255, 255, 255, 0.5)',
   black: '#000000',
+  black50: 'rgba(0, 0, 0, 0.5)',
   gray: '#979797',
   app_background: 'rgb(245,245,245)',
   border: '#E5E5E5',

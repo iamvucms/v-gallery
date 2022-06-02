@@ -1,6 +1,17 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {Albums, Favorite, Home, Onboarding, Search} from '../screens';
+import {
+  AlbumDetail,
+  Albums,
+  Capture,
+  CreateAlbum,
+  CreateAlbumTitle,
+  Favorite,
+  Home,
+  MediaPicker,
+  Onboarding,
+  Search,
+} from '../screens';
 import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {navigationConfig} from './config';
@@ -40,6 +51,30 @@ const HomeTab = () => {
       <BottomTab.Screen name="Albums" component={Albums} />
       <BottomTab.Screen name="Favorite" component={Favorite} />
     </BottomTab.Navigator>
+  );
+};
+const HomeStack = () => {
+  return (
+    <Stack.Navigator screenOptions={navigationConfig}>
+      <Stack.Screen name="HomeTab" component={HomeTab} />
+      <Stack.Screen name="Capture" component={Capture} />
+      <Stack.Screen
+        options={{
+          animation: 'fade_from_bottom',
+        }}
+        name="MediaPicker"
+        component={MediaPicker}
+      />
+      <Stack.Screen name="CreateAlbum" component={CreateAlbum} />
+      <Stack.Screen name="CreateAlbumTitle" component={CreateAlbumTitle} />
+      <Stack.Screen
+        options={{
+          animation: 'none',
+        }}
+        name="AlbumDetail"
+        component={AlbumDetail}
+      />
+    </Stack.Navigator>
   );
 };
 const AppNavigationStack = () => {
@@ -118,7 +153,7 @@ const AppNavigationStack = () => {
         <NavigationContainer ref={navigationRef}>
           <Stack.Navigator screenOptions={navigationConfig}>
             <Stack.Screen name="Onboarding" component={Onboarding} />
-            <Stack.Screen name="HomeTab" component={HomeTab} />
+            <Stack.Screen name="HomeStack" component={HomeStack} />
           </Stack.Navigator>
         </NavigationContainer>
       </Animated.View>

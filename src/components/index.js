@@ -8,3 +8,6 @@ export {default as PhotoCarousel} from './PhotoCarousel';
 export {default as BottomTabBar} from './BottomTabBar';
 export {default as CaptureButton} from './CaptureButton';
 export {default as ConfirmModal} from './ConfirmModal';
+export {default as Header} from './Header';
+export {default as LoadingIndicatorModal} from './LoadingIndicatorModal';
+export {default as VPlayer} from './VPlayer';

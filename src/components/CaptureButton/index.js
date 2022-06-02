@@ -1,8 +1,8 @@
-import {Pressable, TouchableOpacity, View} from 'react-native';
+import {Modal, Pressable, TouchableOpacity, View} from 'react-native';
 import React, {useRef} from 'react';
 import styles from './styles';
 import {PlusSvg} from '../../assets/svg';
-import {Colors, CreateOptions} from '../../constants';
+import {Colors, CreateOptions, isAndroid} from '../../constants';
 import Animated, {
   BounceIn,
   interpolate,
@@ -34,8 +34,13 @@ const CaptureButton = () => {
       anim.value = withSpring(1);
     });
   }, []);
-  const onHide = React.useCallback(() => {
-    const callback = () => state.setVisible(false);
+  const onHide = React.useCallback(callback2 => {
+    const callback = () => {
+      if (typeof callback2 === 'function') {
+        callback2();
+      }
+      state.setVisible(false);
+    };
     anim.value = withTiming(
       0,
       {},
@@ -63,9 +68,11 @@ const CaptureButton = () => {
         key={index}
         index={index}
         anim={anim}
+        hide={onHide}
       />
     );
   };
+  const Container = isAndroid ? Modal : Portal;
   return (
     <React.Fragment>
       <TouchableOpacity
@@ -80,8 +87,12 @@ const CaptureButton = () => {
       <Observer>
         {() => {
           return (
-            state.isVisible && (
-              <Portal>
+            !!state.isVisible && (
+              <Container
+                statusBarTranslucent
+                visible={true}
+                animationType="none"
+                transparent>
                 <View style={styles.overlayContainer}>
                   <View
                     style={[
@@ -109,7 +120,7 @@ const CaptureButton = () => {
                     </TouchableOpacity>
                   </View>
                 </View>
-              </Portal>
+              </Container>
             )
           );
         }}
@@ -119,7 +130,7 @@ const CaptureButton = () => {
 };
 
 export default CaptureButton;
-const CaptureItem = React.memo(({index, anim, navigation}) => {
+const CaptureItem = React.memo(({index, anim, navigation, hide}) => {
   const captureOption = CreateOptions[index];
   const captureItemStyle = useAnimatedStyle(() => ({
     transform: [
@@ -141,7 +152,10 @@ const CaptureItem = React.memo(({index, anim, navigation}) => {
     backgroundColor: captureOption.bgColor,
   }));
   const onPress = React.useCallback(() => {
-    navigation.navigate(captureOption.routeName, captureOption.params);
+    const callback = () => {
+      navigation.navigate(captureOption.routeName, captureOption.params);
+    };
+    hide(callback);
   }, []);
   return (
     <Animated.View style={[styles.captureItem, captureItemStyle]}>

@@ -1,5 +1,12 @@
 import {action, computed, flow, makeObservable, observable} from 'mobx';
-import {ignorePersistProperties, fetchMediaItems} from '../utils';
+import {appStore} from '.';
+import {FETCH_MEDIA_LIMIT, SEARCH_MEDIA_LIMIT} from '../constants';
+import {
+  ignorePersistProperties,
+  fetchMediaItems,
+  processError,
+  uploadMediaItem,
+} from '../utils';
 
 export class GalleryStore {
   photos = [];
@@ -9,12 +16,14 @@ export class GalleryStore {
   fetchingPhotos = false;
   nextSearchPageToken = '';
   searching = false;
+  creatingMedia = false;
   constructor() {
     ignorePersistProperties(this, [
       'nextPageToken',
       'fetchingPhotos',
       'searching',
       'nextSearchPageToken',
+      'creatingMedia',
     ]);
     makeObservable(this, {
       photos: observable,
@@ -23,11 +32,17 @@ export class GalleryStore {
       searching: observable,
       feedPhotos: computed,
       fetchingPhotos: observable,
+      creatingMedia: observable,
       carouselPhotos: computed,
       fetchPhotos: flow,
       fetchResults: flow,
+      createMedia: flow,
+      createMultipleMedia: flow,
       addFavorite: action,
       removeFavorite: action,
+      toggleSelectedPhoto: action,
+      clearSelectedPhotos: action,
+      numberOfSelectedPhotos: computed,
     });
   }
   get feedPhotos() {
@@ -41,16 +56,21 @@ export class GalleryStore {
     this.fetchingPhotos = true;
     try {
       const pageToken = isFetchMore ? this.nextPageToken : '';
-      const limit = 40;
-      const {photos, nextPageToken} = yield fetchMediaItems(
-        '',
+      if (typeof pageToken === 'undefined') {
+        return;
+      }
+      const {photos, nextPageToken, error} = yield fetchMediaItems(
+        {},
         pageToken,
-        limit,
+        FETCH_MEDIA_LIMIT,
       );
+      if (error) {
+        throw error;
+      }
       this.nextPageToken = nextPageToken;
       this.photos = isFetchMore ? [...this.photos, ...photos] : photos;
     } catch (err) {
-      console.log({fetchPhotos: err});
+      processError(err, 'fetchPhotos');
     }
     this.fetchingPhotos = false;
   }
@@ -59,19 +79,53 @@ export class GalleryStore {
     this.searching = true;
     try {
       const pageToken = isFetchMore ? this.nextSearchPageToken : '';
-      const {photos, nextPageToken} = yield fetchMediaItems(
-        query,
+      if (typeof pageToken === 'undefined') {
+        return;
+      }
+      const {photos, nextPageToken, error} = yield fetchMediaItems(
+        {},
         pageToken,
-        30,
+        SEARCH_MEDIA_LIMIT,
       );
+      if (error) {
+        throw error;
+      }
       this.nextSearchPageToken = nextPageToken;
       this.searchResults = isFetchMore
         ? [...this.searchResults, ...photos]
         : photos;
     } catch (err) {
-      console.log({fetchResults: err});
+      processError(err, 'fetchResults');
     }
     this.searching = false;
+  }
+  *createMedia(fileUri, mimeType, preventUpdateLoadingState = false) {
+    if (!preventUpdateLoadingState) {
+      this.creatingMedia = true;
+    }
+    try {
+      const {mediaItems, error} = yield uploadMediaItem(fileUri, mimeType);
+      if (error) {
+        throw error;
+      }
+      this.photos = [...mediaItems, ...this.photos];
+    } catch (err) {
+      processError(err, 'createMedia');
+    }
+    if (!preventUpdateLoadingState) {
+      this.creatingMedia = false;
+    }
+  }
+  *createMultipleMedia(files = []) {
+    this.creatingMedia = true;
+    try {
+      for (const file of files) {
+        yield this.createMedia(file.uri, file.mimeType, true);
+      }
+    } catch (err) {
+      processError(err, 'createMultipleMedia');
+    }
+    this.creatingMedia = false;
   }
   addFavorite(photo) {
     this.favoritePhotos.push({...photo});
@@ -81,7 +135,24 @@ export class GalleryStore {
       favorite => favorite.id !== photoId,
     );
   }
+  toggleSelectedPhoto(photoId) {
+    const photo = this.photos.find(photo => photo.id === photoId);
+    if (photo) {
+      photo.selected = !!!photo.selected;
+    }
+  }
+  clearSelectedPhotos() {
+    this.photos.forEach(photo => {
+      photo.selected = false;
+    });
+  }
+  getSelectedPhotos() {
+    return this.photos.filter(photo => photo.selected);
+  }
   getIsFavorite(photoId) {
     return !!this.favoritePhotos.find(favorite => favorite.id === photoId);
+  }
+  get numberOfSelectedPhotos() {
+    return this.photos.filter(photo => photo.selected).length;
   }
 }

@@ -6,6 +6,7 @@ import {
 import React from 'react';
 import {
   AlbumsSvg,
+  CameraSvg,
   HeartSvg,
   HomeSvg,
   PhotoSvg,
@@ -66,6 +67,14 @@ export const DrawerData = [
     routeName: 'Home',
   },
   {
+    title: 'New Album',
+    routeName: 'CreateAlbum',
+  },
+  {
+    title: 'New Media',
+    routeName: 'Capture',
+  },
+  {
     title: 'Search',
     routeName: 'Search',
   },
@@ -80,7 +89,7 @@ export const DrawerData = [
 ];
 export const CreateOptions = [
   {
-    icon: <PhotoSvg color={Colors.white} size={16} />,
+    icon: <CameraSvg color={Colors.white} size={16} />,
     routeName: 'Capture',
     params: {
       type: 'photo',
@@ -101,3 +110,7 @@ export const CreateOptions = [
     bgColor: Colors.green,
   },
 ];
+export const FETCH_MEDIA_LIMIT = 40;
+export const SEARCH_MEDIA_LIMIT = 30;
+export const FETCH_ALBUM_LIMIT = 10;
+export const FETCH_ALBUM_PHOTO_LIMIT = 20;

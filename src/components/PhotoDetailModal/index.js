@@ -1,7 +1,7 @@
 import {Pressable, StatusBar, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './styles';
-import {VImage, VText, Padding} from '../../components';
+import {VImage, VPlayer, VText, Padding} from '../../components';
 import Animated, {
   FadeInUp,
   interpolate,
@@ -185,7 +185,11 @@ const PhotoDetailModal = observer(() => {
                 {appStore.isPhotoDetailVisible && (
                   <Animated.View
                     style={[styles.imageContainer, imageContainerStyle]}>
-                    <VImage resizeMode="cover" data={image} />
+                    {image.isVideo ? (
+                      <VPlayer uri={image.baseUrl} />
+                    ) : (
+                      <VImage resizeMode="cover" data={image} />
+                    )}
                   </Animated.View>
                 )}
                 {appStore.isPhotoDetailVisible && (

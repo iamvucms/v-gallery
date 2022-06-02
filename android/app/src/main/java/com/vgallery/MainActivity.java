@@ -1,4 +1,4 @@
-package com.vgallery;
+package com.vucms.vgallery;
 
 import com.facebook.react.ReactActivity;
 import android.os.Bundle;

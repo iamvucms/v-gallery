@@ -5,7 +5,11 @@ import AppNavigationStack from './src/navigation';
 import {trunk} from './src/stores';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {PortalProvider} from '@gorhom/portal';
-import {ConfirmModal, PhotoDetailModal} from './src/components';
+import {
+  ConfirmModal,
+  LoadingIndicatorModal,
+  PhotoDetailModal,
+} from './src/components';
 const App = () => {
   const [loaded, setLoaded] = React.useState(false);
   useEffect(() => {

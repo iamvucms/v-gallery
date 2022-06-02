@@ -4,3 +4,7 @@ export {default as Search} from './Search';
 export {default as Favorite} from './Favorite';
 export {default as Albums} from './Albums';
 export {default as Capture} from './Capture';
+export {default as MediaPicker} from './MediaPicker';
+export {default as CreateAlbum} from './CreateAlbum';
+export {default as CreateAlbumTitle} from './CreateAlbumTitle';
+export {default as AlbumDetail} from './AlbumDetail';

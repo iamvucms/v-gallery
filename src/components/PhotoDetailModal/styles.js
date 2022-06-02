@@ -30,7 +30,7 @@ export default StyleSheet.create({
     right: 0,
     top: 53,
     paddingHorizontal: 20,
-    zIndex: 99,
+    zIndex: 999,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',

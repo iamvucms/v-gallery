@@ -56,6 +56,12 @@
 	</dict>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string></string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>VGallery want to access to your medias</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>VGallery want to access to your photos</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>VGallery want to access to your photos</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Rubik-Black.ttf</string>

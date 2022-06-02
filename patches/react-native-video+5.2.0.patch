@@ -1,0 +1,74 @@
+diff --git a/node_modules/react-native-video/android-exoplayer/build.gradle b/node_modules/react-native-video/android-exoplayer/build.gradle
+index d005a58..6a9922b 100644
+--- a/node_modules/react-native-video/android-exoplayer/build.gradle
++++ b/node_modules/react-native-video/android-exoplayer/build.gradle
+@@ -28,7 +28,7 @@ android {
+ 
+ dependencies {
+     implementation "com.facebook.react:react-native:${safeExtGet('reactNativeVersion', '+')}"
+-    implementation('com.google.android.exoplayer:exoplayer:2.13.2') {
++    implementation('com.google.android.exoplayer:exoplayer:2.13.3') {
+         exclude group: 'com.android.support'
+     }
+ 
+@@ -37,7 +37,7 @@ dependencies {
+     implementation "androidx.core:core:1.1.0"
+     implementation "androidx.media:media:1.1.0"
+ 
+-    implementation('com.google.android.exoplayer:extension-okhttp:2.13.2') {
++    implementation('com.google.android.exoplayer:extension-okhttp:2.13.3') {
+         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+     }
+     implementation 'com.squareup.okhttp3:okhttp:${OKHTTP_VERSION}'
+diff --git a/node_modules/react-native-video/android-exoplayer/build/intermediates/aar_metadata/debug/aar-metadata.properties b/node_modules/react-native-video/android-exoplayer/build/intermediates/aar_metadata/debug/aar-metadata.properties
+new file mode 100644
+index 0000000..d8560bd
+--- /dev/null
++++ b/node_modules/react-native-video/android-exoplayer/build/intermediates/aar_metadata/debug/aar-metadata.properties
+@@ -0,0 +1,2 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
+diff --git a/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/mergeDebugShaders/merger.xml
+new file mode 100644
+index 0000000..dcd3d42
+--- /dev/null
++++ b/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/mergeDebugShaders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android-exoplayer/src/main/shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android-exoplayer/src/debug/shaders"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/packageDebugAssets/merger.xml b/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/packageDebugAssets/merger.xml
+new file mode 100644
+index 0000000..14adb77
+--- /dev/null
++++ b/node_modules/react-native-video/android-exoplayer/build/intermediates/incremental/packageDebugAssets/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android-exoplayer/src/main/assets"/><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android-exoplayer/build/intermediates/shader_assets/debug/out"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android-exoplayer/src/debug/assets"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-video/android/build/intermediates/aar_metadata/debug/aar-metadata.properties b/node_modules/react-native-video/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+new file mode 100644
+index 0000000..d8560bd
+--- /dev/null
++++ b/node_modules/react-native-video/android/build/intermediates/aar_metadata/debug/aar-metadata.properties
+@@ -0,0 +1,2 @@
++aarFormatVersion=1.0
++aarMetadataVersion=1.0
+diff --git a/node_modules/react-native-video/android/build/intermediates/incremental/mergeDebugShaders/merger.xml b/node_modules/react-native-video/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+new file mode 100644
+index 0000000..01cfa69
+--- /dev/null
++++ b/node_modules/react-native-video/android/build/intermediates/incremental/mergeDebugShaders/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android/src/main/shaders"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android/src/debug/shaders"/></dataSet></merger>
+\ No newline at end of file
+diff --git a/node_modules/react-native-video/android/build/intermediates/incremental/packageDebugAssets/merger.xml b/node_modules/react-native-video/android/build/intermediates/incremental/packageDebugAssets/merger.xml
+new file mode 100644
+index 0000000..f7677f7
+--- /dev/null
++++ b/node_modules/react-native-video/android/build/intermediates/incremental/packageDebugAssets/merger.xml
+@@ -0,0 +1,2 @@
++<?xml version="1.0" encoding="utf-8"?>
++<merger version="3"><dataSet config="main" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android/src/main/assets"/><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android/build/intermediates/shader_assets/debug/out"/></dataSet><dataSet config="debug" ignore_pattern="!.svn:!.git:!.ds_store:!*.scc:.*:&lt;dir>_*:!CVS:!thumbs.db:!picasa.ini:!*~"><source path="/Volumes/VuMac/Project/Vgallery/node_modules/react-native-video/android/src/debug/assets"/></dataSet></merger>
+\ No newline at end of file

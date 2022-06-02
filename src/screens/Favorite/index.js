@@ -65,18 +65,18 @@ const Favorite = ({navigation}) => {
     [],
   );
   return (
-    <Container>
+    <Container disableFirst>
       <View style={styles.header}>
         <View style={styles.headerTitle}>
-          <VText fontSize="h6" fontWeight={500}>
+          <VText lineHeightRatio={1} fontSize={20} fontWeight={500}>
             Favorite
           </VText>
           <Animated.View entering={BounceIn}>
             <Padding paddingHorizontal={5}>
-              <HeartSvg size={30} color={Colors.primary} />
+              <HeartSvg size={20} color={Colors.primary} />
             </Padding>
           </Animated.View>
-          <VText fontSize="h6" fontWeight={500}>
+          <VText lineHeightRatio={1} fontSize={20} fontWeight={500}>
             Photos
           </VText>
         </View>

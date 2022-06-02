@@ -98,7 +98,7 @@ const ConfirmModal = () => {
             </VText>
           </TouchableOpacity>
         </View>
-        <Padding paddingBottom={bottom} />
+        <Padding paddingBottom={bottom || 20} />
       </View>
     </Animated.View>
   );

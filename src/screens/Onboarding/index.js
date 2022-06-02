@@ -1,7 +1,7 @@
 import {Image, TouchableOpacity, View} from 'react-native';
 import React, {useEffect} from 'react';
 import styles from './styles';
-import {Colors, Layout} from '../../constants';
+import {Colors, isAndroid, Layout} from '../../constants';
 import {OnboardingData} from '../../constants/data';
 import {Padding, VText} from '../../components';
 import Animated, {
@@ -36,7 +36,7 @@ const Onboarding = ({navigation}) => {
             index: 0,
             routes: [
               {
-                name: 'HomeTab',
+                name: 'HomeStack',
               },
             ],
           }),
@@ -75,13 +75,23 @@ const Onboarding = ({navigation}) => {
   }));
   const onSignInPress = React.useCallback(async () => {
     try {
-      await GoogleSignin.signIn();
-      const response = await GoogleSignin.addScopes({
-        scopes: [
-          'https://www.googleapis.com/auth/photoslibrary',
-          'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
-        ],
-      });
+      if (isAndroid) {
+        GoogleSignin.configure({
+          scopes: [
+            'https://www.googleapis.com/auth/photoslibrary',
+            'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
+          ],
+        });
+      }
+      const response = await GoogleSignin.signIn();
+      if (!isAndroid) {
+        await GoogleSignin.addScopes({
+          scopes: [
+            'https://www.googleapis.com/auth/photoslibrary',
+            'https://www.googleapis.com/auth/photoslibrary.edit.appcreateddata',
+          ],
+        });
+      }
       const token = await GoogleSignin.getTokens();
       const user = {
         ...response.user,
@@ -89,7 +99,7 @@ const Onboarding = ({navigation}) => {
       };
       appStore.setUser(user);
     } catch (e) {
-      console.log({onSignInPress: e});
+      console.log(e);
     }
   }, []);
   return (

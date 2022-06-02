@@ -8,7 +8,8 @@ export default StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 10,
+    marginTop: 45,
+    marginBottom: 15,
   },
   headerTitle: {
     flexDirection: 'row',

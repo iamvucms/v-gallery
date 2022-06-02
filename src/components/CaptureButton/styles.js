@@ -14,6 +14,7 @@ export default StyleSheet.create({
   },
   overlayContainer: {
     ...StyleSheet.absoluteFillObject,
+    zIndex: 999,
   },
   backdrop: {
     position: 'absolute',

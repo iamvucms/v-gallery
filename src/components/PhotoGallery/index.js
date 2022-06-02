@@ -1,9 +1,9 @@
-import {Image, View} from 'react-native';
+import {Image, RefreshControl, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import styles from './styles';
 import {PinchGestureHandler, ScrollView} from 'react-native-gesture-handler';
 import VText from '../VText';
-import {Layout} from '../../constants';
+import {Colors, Layout} from '../../constants';
 import Animated, {
   useAnimatedGestureHandler,
   useAnimatedStyle,
@@ -12,8 +12,9 @@ import Animated, {
   withTiming,
 } from 'react-native-reanimated';
 import VImage from '../VImage';
-import {appStore} from '../../stores';
+import {appStore, galleryStore} from '../../stores';
 import Padding from '../Padding';
+import {Observer, useLocalObservable} from 'mobx-react-lite';
 const {width} = Layout.window;
 const MAX_COLUMN = 6;
 const MIN_COLUMN = 1;
@@ -29,6 +30,8 @@ const PhotoGallery = ({
   title = `Your Media`,
   emptyComponent,
   onFetchMore,
+  refreshing,
+  onRefresh = () => {},
 }) => {
   const animGridSize = useSharedValue(getGridItemSize(3));
   const animColumn = useSharedValue(3);
@@ -44,6 +47,7 @@ const PhotoGallery = ({
       },
     ],
   }));
+
   const onImagePress = React.useCallback((image, specs) => {
     appStore.setPhotoDetailData(true, image, specs);
   }, []);
@@ -88,6 +92,13 @@ const PhotoGallery = ({
     <View style={styles.container}>
       <PinchGestureHandler onGestureEvent={pingestureHandler}>
         <Animated.ScrollView
+          refreshControl={
+            <RefreshControl
+              colors={[Colors.primary]}
+              onRefresh={onRefresh}
+              refreshing={refreshing}
+            />
+          }
           onScrollEndDrag={onScrollEnd}
           onMomentumScrollEnd={onScrollEnd}
           style={[styles.gridModeContainer, girdContainerStyle]}>

@@ -11,13 +11,19 @@ import {
 import {MenuBarsSvg} from '../../assets/svg';
 import {Colors} from '../../constants';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
-import {autorun, flow} from 'mobx';
-import {appStore, galleryStore} from '../../stores';
-import {Observer} from 'mobx-react-lite';
+import {autorun, flow, flowResult} from 'mobx';
+import {albumStore, appStore, galleryStore} from '../../stores';
+import {Observer, useLocalObservable} from 'mobx-react-lite';
 import {CommonActions} from '@react-navigation/native';
 
 const Home = ({navigation}) => {
   const {bottom} = useSafeAreaInsets();
+  const state = useLocalObservable(() => ({
+    refreshing: false,
+    setRefreshing: value => {
+      state.refreshing = value;
+    },
+  }));
   useEffect(() => {
     autorun(() => {
       if (!appStore.isLogined) {
@@ -34,6 +40,7 @@ const Home = ({navigation}) => {
       }
     });
     flow(galleryStore.fetchPhotos());
+    flow(albumStore.fetchAlbums());
   }, []);
   const renderListHeader = () => (
     <Observer>
@@ -51,6 +58,11 @@ const Home = ({navigation}) => {
       )}
     </Observer>
   );
+  const onRefresh = React.useCallback(async () => {
+    state.setRefreshing(true);
+    await flowResult(galleryStore.fetchPhotos());
+    state.setRefreshing(false);
+  }, []);
   const onMenuPress = React.useCallback(() => {
     appStore.setDrawerMenuNavigationVisible(true);
   }, []);
@@ -76,6 +88,8 @@ const Home = ({navigation}) => {
         <Observer>
           {() => (
             <PhotoGallery
+              refreshing={state.refreshing}
+              onRefresh={onRefresh}
               data={galleryStore.feedPhotos}
               listFooter={renderListFooter}
               listHeader={renderListHeader}
