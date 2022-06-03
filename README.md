@@ -2,7 +2,8 @@
 # Introduction
 
 VGallery - A beautiful gallery built by react native, react native gesture handler and reanimated.
-
+# Google photos API version with addtional features  
+## => Checkout branch [GOOGLE PHOTOS](https://github.com/iamvucms/v-gallery/tree/google-photos)
 ## Installation
 
 Clone my repo
